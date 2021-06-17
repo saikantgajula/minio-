@@ -2,7 +2,7 @@
 
 How to  install minio on secure  mapr cluster.
 
-#Pre-req:-
+# Pre-req:-
 Secure mapr data node or edge node.
 
 
@@ -21,7 +21,7 @@ total 1
 drwxr-xr-x 7 mapr mapr 6 Feb 16 18:06 example.mapr.cluster
 
 
-For Edge node.
+# For Edge node.
 
 sudo yum install mapr-objectstore-client
 
@@ -35,7 +35,7 @@ sudo /opt/mapr/objectstore-client/objectstore-client-<version>/bin/objectstore.s
 When the process is running, the system prints the following message:
 Minio is running
 
-#For Data node
+# For Data node
 
 yum install mapr-posix-client-basic -y
 mkdir -m 777 /mapr
