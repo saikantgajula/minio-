@@ -61,9 +61,19 @@ yum install mapr-objectstore-client mapr-objectstore-gateway -y
 sudo /opt/mapr/server/configure.sh -R
 
 /opt/mapr/objectstore-client/objectstore-client-*/bin/objectstore.sh status
+
 ```
 
-2. Configure ssl certificate for mc command
+# Accesssing Minio Dashboad.
+
+http://10.163.173.163:9000/minio/
+
+Default username and password :- minioadmin/minioadmin
+
+
+# Working with Minio Client
+
+1 Configure ssl certificate for mc command
 
 ```
 [root@m2-maprts-vm163-173 certs]# pwd
@@ -72,14 +82,20 @@ sudo /opt/mapr/server/configure.sh -R
 [root@m2-maprts-vm163-173 certs]# cp public.crt /root/.mc/certs/CAs
 ```
 
-3. How to add host and  create bucket manually
+2. How to add host withi minio
 
 ``` 
 [root@m2-maprts-vm163-173 certs]# /opt/mapr/objectstore-client/objectstore-client-2.0.0/util/mc config host add minio https://m2-maprts-vm163-173.mip.storage.hpecorp.net:9000 minioadmin minioadmin
 Added `minio` successfully.
 ```
-4. How to create bucket manually
+3. How to create bucket manually
 
 ``` 
 /opt/mapr/objectstore-client/objectstore-client-2.0.0/util/mc mb minio/test1
 ```
+4. How to list bucket contents 
+
+``` 
+/opt/mapr/objectstore-client/objectstore-client-2.0.0/util/mc ls minio/test1
+```
+
