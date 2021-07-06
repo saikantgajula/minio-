@@ -99,3 +99,95 @@ Added `minio` successfully.
 /opt/mapr/objectstore-client/objectstore-client-2.0.0/util/mc ls minio/test1
 ```
 
+# Hadoop Access via s3 api.
+
+1. Add below line in core-site.xml according to your environment.
+
+/opt/mapr/hadoop/hadoop-2.7.4/etc/hadoop/core-site.xml
+
+```
+<property>
+        <name>fs.s3a.endpoint</name>
+        <value>https://m2-maprts-vm163-173.mip.storage.hpecorp.net:9000</value>
+</property>
+<property>
+        <name>fs.s3a.access.key</name>
+        <value>minioadmin</value>
+</property>
+<property>
+        <name>fs.s3a.secret.key</name>
+        <value>minioadmin</value>
+</property>
+<property>
+        <name>fs.s3a.path.style.access</name>
+        <value>true</value>
+</property>
+<property>
+        <name>fs.s3a.impl</name>
+        <value>org.apache.hadoop.fs.s3a.S3AFileSystem</value>
+</property>
+<property>
+        <name>fs.s3a.connection.ssl.enabled</name>
+        <value>false</value>
+</property>
+```
+
+2. Setup hosts.
+
+```
+/opt/mapr/objectstore-client/objectstore-client-2.0.0/util/mc config host add maprfs https://m2-maprts-vm163-173.mip.storage.hpecorp.net:9000 minioadmin minioadmin
+```
+
+3. Create bucket.
+
+```
+[root@m2-maprts-vm163-173 ~]# /opt/mapr/objectstore-client/objectstore-client-2.0.0/util/mc mb maprfs/dxc
+Bucket created successfully `maprfs/dxc`.
+```
+
+4. List buckets.
+
+```
+[root@m2-maprts-vm163-173 ~]# /opt/mapr/objectstore-client/objectstore-client-2.0.0/util/mc ls maprfs
+[2021-07-06 07:30:45 PDT]      0B dxc/
+[2021-07-06 05:54:16 PDT]      0B sai1/
+[2021-07-06 07:12:15 PDT]      0B test1/
+[2021-07-06 07:28:04 PDT]      0B test2/
+
+```
+
+5. Copy contents.
+
+```
+[root@m2-maprts-vm163-173 ~]# /opt/mapr/objectstore-client/objectstore-client-2.0.0/util/mc cp /etc/passwd maprfs/dxc
+/etc/passwd:                    1.46 KiB / 1.46 KiB ┃▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓┃ 123.44 KiB/s 0s
+
+```
+
+6. List contents.
+
+```
+[root@m2-maprts-vm163-173 ~]# /opt/mapr/objectstore-client/objectstore-client-2.0.0/util/mc ls maprfs/dxc
+[2021-07-06 07:35:36 PDT]  1.5KiB passwd
+```
+
+7.IMP :- Remember to give complete path for bucket other wise you will get error bucket doesn't exists.
+Example:-
+
+```
+[root@m2-maprts-vm163-173 ~]# hadoop fs -ls s3a://dxc
+ls: `s3a://dxc': No such file or directory
+[root@m2-maprts-vm163-173 ~]#
+```
+
+Correct way (Please note there is / after dxc or bucket name)
+
+```
+[root@m2-maprts-vm163-173 ~]# hadoop fs -ls s3a://dxc/
+Found 1 items
+-rw-rw-rw-   1       1494 2021-07-06 07:35 s3a://dxc/passwd
+[root@m2-maprts-vm163-173 ~]#
+![image](https://user-images.githubusercontent.com/47996546/124620296-f746b900-de96-11eb-966e-a9a72106fd4b.png)
+
+```
+
