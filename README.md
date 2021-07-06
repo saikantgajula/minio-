@@ -76,16 +76,16 @@ Default username and password :- minioadmin/minioadmin
 1 Configure ssl certificate for mc command
 
 ```
-[root@m2-maprts-vm163-173 certs]# pwd
+[root@vm1 certs]# pwd
 /opt/mapr/objectstore-client/objectstore-client-2.0.0/conf/certs
-[root@m2-maprts-vm163-173 certs]#
-[root@m2-maprts-vm163-173 certs]# cp public.crt /root/.mc/certs/CAs
+[root@vm1 certs]#
+[root@vm1 certs]# cp public.crt /root/.mc/certs/CAs
 ```
 
 2. How to add host withi minio
 
 ``` 
-[root@m2-maprts-vm163-173 certs]# /opt/mapr/objectstore-client/objectstore-client-2.0.0/util/mc config host add minio https://m2-maprts-vm163-173.mip.storage.hpecorp.net:9000 minioadmin minioadmin
+[root@vm1 certs]# /opt/mapr/objectstore-client/objectstore-client-2.0.0/util/mc config host add minio https://vm1.mip.storage.hpecorp.net:9000 minioadmin minioadmin
 Added `minio` successfully.
 ```
 3. How to create bucket manually
@@ -108,7 +108,7 @@ Added `minio` successfully.
 ```
 <property>
         <name>fs.s3a.endpoint</name>
-        <value>https://m2-maprts-vm163-173.mip.storage.hpecorp.net:9000</value>
+        <value>https://vm1.mip.storage.hpecorp.net:9000</value>
 </property>
 <property>
         <name>fs.s3a.access.key</name>
@@ -135,21 +135,21 @@ Added `minio` successfully.
 2. Setup hosts.
 
 ```
-/opt/mapr/objectstore-client/objectstore-client-2.0.0/util/mc config host add maprfs https://m2-maprts-vm163-173.mip.storage.hpecorp.net:9000 minioadmin minioadmin
+/opt/mapr/objectstore-client/objectstore-client-2.0.0/util/mc config host add maprfs https://vm1.mip.storage.hpecorp.net:9000 minioadmin minioadmin
 ```
 
 3. Create bucket.
 
 ```
-[root@m2-maprts-vm163-173 ~]# /opt/mapr/objectstore-client/objectstore-client-2.0.0/util/mc mb maprfs/dxc
-Bucket created successfully `maprfs/dxc`.
+[root@vm1 ~]# /opt/mapr/objectstore-client/objectstore-client-2.0.0/util/mc mb maprfs/customer1
+Bucket created successfully `maprfs/customer1`.
 ```
 
 4. List buckets.
 
 ```
-[root@m2-maprts-vm163-173 ~]# /opt/mapr/objectstore-client/objectstore-client-2.0.0/util/mc ls maprfs
-[2021-07-06 07:30:45 PDT]      0B dxc/
+[root@vm1 ~]# /opt/mapr/objectstore-client/objectstore-client-2.0.0/util/mc ls maprfs
+[2021-07-06 07:30:45 PDT]      0B customer1/
 [2021-07-06 05:54:16 PDT]      0B sai1/
 [2021-07-06 07:12:15 PDT]      0B test1/
 [2021-07-06 07:28:04 PDT]      0B test2/
@@ -159,7 +159,7 @@ Bucket created successfully `maprfs/dxc`.
 5. Copy contents.
 
 ```
-[root@m2-maprts-vm163-173 ~]# /opt/mapr/objectstore-client/objectstore-client-2.0.0/util/mc cp /etc/passwd maprfs/dxc
+[root@vm1 ~]# /opt/mapr/objectstore-client/objectstore-client-2.0.0/util/mc cp /etc/passwd maprfs/customer1
 /etc/passwd:                    1.46 KiB / 1.46 KiB ┃▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓┃ 123.44 KiB/s 0s
 
 ```
@@ -167,7 +167,7 @@ Bucket created successfully `maprfs/dxc`.
 6. List contents.
 
 ```
-[root@m2-maprts-vm163-173 ~]# /opt/mapr/objectstore-client/objectstore-client-2.0.0/util/mc ls maprfs/dxc
+[root@vm1 ~]# /opt/mapr/objectstore-client/objectstore-client-2.0.0/util/mc ls maprfs/customer1
 [2021-07-06 07:35:36 PDT]  1.5KiB passwd
 ```
 
@@ -175,18 +175,18 @@ Bucket created successfully `maprfs/dxc`.
 Example:-
 
 ```
-[root@m2-maprts-vm163-173 ~]# hadoop fs -ls s3a://dxc
-ls: `s3a://dxc': No such file or directory
-[root@m2-maprts-vm163-173 ~]#
+[root@vm1 ~]# hadoop fs -ls s3a://customer1
+ls: `s3a://customer1': No such file or directory
+[root@vm1 ~]#
 ```
 
-Correct way (Please note there is / after dxc or bucket name)
+Correct way (Please note there is / after customer1 or bucket name)
 
 ```
-[root@m2-maprts-vm163-173 ~]# hadoop fs -ls s3a://dxc/
+[root@vm1 ~]# hadoop fs -ls s3a://customer1/
 Found 1 items
--rw-rw-rw-   1       1494 2021-07-06 07:35 s3a://dxc/passwd
-[root@m2-maprts-vm163-173 ~]#
+-rw-rw-rw-   1       1494 2021-07-06 07:35 s3a://customer1/passwd
+[root@vm1 ~]#
 ![image](https://user-images.githubusercontent.com/47996546/124620296-f746b900-de96-11eb-966e-a9a72106fd4b.png)
 
 ```
