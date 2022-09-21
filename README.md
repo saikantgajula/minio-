@@ -1,4 +1,4 @@
-# minio-
+# minio
 
 How to  install minio on secure  mapr cluster.
 
